@@ -6,6 +6,7 @@ import uuid
 import mysql.connector
 from mysql.connector.constants import ClientFlag
 import datetime
+from datetime import datetime
 
 config = {
     'user': 'jacobwoods45',
