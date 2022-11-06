@@ -14,7 +14,7 @@ CORS(app)
 def get_all_incidents():
     conn = sqlite3.connect('roadrage.db')
     cur = conn.cursor()
-    cur.execute("SELECT * FROM reports")
+    cur.execute("SELECT * FROM reports WHERE resolved = 0")
     ## convert to json
     rows = cur.fetchall()
     return jsonify(rows)
@@ -27,7 +27,7 @@ def add_incident():
     long = request.args.get('long')
     lat = request.args.get('lat')
     email = request.args.get('email')
-    cur.execute("INSERT INTO reports VALUES (?,?,?,?,?,?)", (str(uuid.uuid4()), date, incident_type, long, lat, email))
+    cur.execute("INSERT INTO reports VALUES (?,?,?,?,?,?,?)", (str(uuid.uuid4()), date, incident_type, long, lat, email, 0))
     conn.commit()
     return {"status": "success",
             "message": "Incident added successfully",
@@ -36,12 +36,13 @@ def add_incident():
             "long" : long,
             "lat" : lat,
             "email" : email }
-@app.route('/remove_incident', methods= ['POST'])
+@app.route('/resolve_incident', methods= ['POST'])
 def remove_incident():
     conn = sqlite3.connect('roadrage.db')
     cur = conn.cursor()
     id = request.args.get('id')
-    cur.execute("DELETE FROM reports WHERE rid = ?", (id,))
+    ##For given rid, set resolved to 1
+    cur.execute("UPDATE reports SET resolved = 1 WHERE id = ?", (id,))
     conn.commit()
     return {"status": "success",
             "message": "Incident removed successfully",
@@ -87,5 +88,5 @@ if __name__ == '__main__':
         cur.execute("""CREATE TABLE users (email VARCHAR(30) NOT NULL UNIQUE,u_password VARCHAR(30) NOT NULL,PRIMARY KEY (email));""")
     cur.execute("""SELECT * FROM sqlite_master WHERE type='table' AND name='reports'""")
     if cur.fetchone() is None:
-        cur.execute("CREATE TABLE reports (rid VARCHAR(30) NOT NULL PRIMARY KEY,user_email VARCHAR30, r_date DATE NOT NULL,category VARCHAR(10) NOT NULL,r_long VARCHAR(20) NOT NULL,r_lat VARCHAR(20));")
+        cur.execute("CREATE TABLE reports (rid VARCHAR(30) NOT NULL PRIMARY KEY,user_email VARCHAR30, r_date DATE NOT NULL,category VARCHAR(10) NOT NULL,r_long VARCHAR(20) NOT NULL,r_lat VARCHAR(20), resolved BIT);")
     app.run(host="0.0.0.0")
