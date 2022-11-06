@@ -28,7 +28,8 @@ def add_incident():
     long = request.args.get('long')
     lat = request.args.get('lat')
     email = request.args.get('email')
-    cur.execute("INSERT INTO reports VALUES (?,?,?,?,?,?,?,)", (str(uuid.uuid4()), date, incident_type, long, lat, email, 0))
+    cur.execute("INSERT INTO reports VALUES (?,?,?,?,?,?,?)", (str(uuid.uuid4()), date, incident_type, long, lat, email, 0))
+    print(str(uuid.uuid4()), date, incident_type, long, lat, email, 0)
     conn.commit()
     conn.close()
     return {"status": "success",
