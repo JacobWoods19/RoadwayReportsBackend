@@ -19,7 +19,7 @@ config = {
 cnxn = mysql.connector.connect(**config)
 
 app = flask.Flask(__name__)
-# CORS(app)
+CORS(app)
 
 config['database'] = 'TigerHacks22' 
 cnxn = mysql.connector.connect(**config)
