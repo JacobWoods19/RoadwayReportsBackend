@@ -53,8 +53,8 @@ def add_incident():
 @app.route('/resolve_incident', methods= ['POST'])
 def remove_incident():
     id = request.args.get('id')
-    ##For given rid, set resolved to 1
-    cur.execute("UPDATE reports SET resolved = 1 WHERE rid = %s", (id,))
+    ##For given rid, delete from reports
+    cur.execute("DELETE FROM reports WHERE rid = %s;" , (id,))
     cnxn.commit()
     return {"status": "success",
             "message": "Incident removed successfully",
