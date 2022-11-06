@@ -69,7 +69,7 @@ def get_chart_data():
 def get_reports_for_email():
     ## given an email, return all reports for that email
     email = request.args.get('email')
-    cur.execute("SELECT * FROM reports WHERE email = %s", (email,))
+    cur.execute("SELECT * FROM reports WHERE user_email = %s", (email,))
     rows = cur.fetchall()
     print(rows)
     return jsonify(rows)

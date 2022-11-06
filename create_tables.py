@@ -21,15 +21,10 @@ cur = cnxn.cursor()
 # # insert user
 # cur.execute("INSERT INTO users (email, u_password) VALUES (%s, %s)", ("user", "password"))
 
-# ## print all users
-# cur.execute("SELECT * FROM users")
-# rows = cur.fetchall()
-## delete all resolved reports
-cur.execute("DELETE FROM resolved_reports")
-cnxn.commit()
-
-
-
+## describe reports table
+cur.execute("DESCRIBE reports")
+rows = cur.fetchall()
+print(rows)
 
 
 cnxn.commit()
