@@ -41,7 +41,7 @@ def remove_incident():
     conn = sqlite3.connect('roadrage.db')
     cur = conn.cursor()
     id = request.args.get('id')
-    cur.execute("DELETE FROM reports WHERE id = ?", (id,))
+    cur.execute("DELETE FROM reports WHERE rid = ?", (id,))
     conn.commit()
     return {"status": "success",
             "message": "Incident removed successfully",
@@ -88,4 +88,4 @@ if __name__ == '__main__':
     cur.execute("""SELECT * FROM sqlite_master WHERE type='table' AND name='reports'""")
     if cur.fetchone() is None:
         cur.execute("CREATE TABLE reports (rid VARCHAR(30) NOT NULL PRIMARY KEY,user_email VARCHAR30, r_date DATE NOT NULL,category VARCHAR(10) NOT NULL,r_long VARCHAR(20) NOT NULL,r_lat VARCHAR(20));")
-    app.run(host="0.0.0.0", debug= True)
+    app.run(host="0.0.0.0")
