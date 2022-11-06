@@ -77,6 +77,11 @@ def get_all_incidents():
 @app.route('/add_incident', methods= ['POST'])
 def add_incident():
     date = request.args.get('date')
+    ## if date is not given, set date to current date
+    if date == None:
+        date = datetime.now()
+    else:
+        date = datetime.strptime(date, '%Y-%m-%d')
     incident_type = request.args.get('incident_type')
     long = request.args.get('long')
     lat = request.args.get('lat')
