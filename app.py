@@ -95,5 +95,5 @@ if __name__ == '__main__':
         cur.execute("""CREATE TABLE users (email VARCHAR(30) NOT NULL UNIQUE,u_password VARCHAR(30) NOT NULL,PRIMARY KEY (email));""")
     cur.execute("""SELECT * FROM sqlite_master WHERE type='table' AND name='reports'""")
     if cur.fetchone() is None:
-        cur.execute("CREATE TABLE reports (rid VARCHAR(30) NOT NULL PRIMARY KEY,user_email VARCHAR30, r_date DATE ,category VARCHAR(10) NOT NULL,r_long VARCHAR(20) NOT NULL,r_lat VARCHAR(20), resolved Int);")
+        cur.execute("CREATE TABLE reports (rid VARCHAR(200) NOT NULL PRIMARY KEY,user_email VARCHAR30, r_date DATE ,category VARCHAR(10) NOT NULL,r_long VARCHAR(20) NOT NULL,r_lat VARCHAR(20), resolved Int);")
     app.run(host="0.0.0.0", port = 8282)
