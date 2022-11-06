@@ -4,9 +4,11 @@ from flask_cors import CORS
 import json
 import sqlite3
 import uuid 
+from flask_cors import CORS
 
 app = flask.Flask(__name__)
 conn = sqlite3.connect('roadrage.db')
+CORS(app)
 
 @app.route('/get_all_incidents')
 def get_all_incidents():
