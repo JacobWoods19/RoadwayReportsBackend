@@ -23,7 +23,7 @@ CORS(app)
 
 config['database'] = 'TigerHacks22' 
 cnxn = mysql.connector.connect(**config)
-cur = cnxn.cursor() 
+cur = cnxn.cursor(buffered=True) 
 
 @app.route('/get_all_incidents')
 def get_all_incidents():
