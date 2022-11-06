@@ -7,7 +7,7 @@ conn = sqlite3.connect('roadrage.db')
 cur = conn.cursor()
 id = "16a395f9-690d-45e4-9d8d-e767f529fed8"
 ##For given rid, set resolved to 1
-("""CREATE TABLE users (email VARCHAR(30) NOT NULL UNIQUE,u_password VARCHAR(30) NOT NULL,PRIMARY KEY (email));""")
+
 cur.execute("UPDATE reports SET resolved = True WHERE rid = ?", (id,))
 conn.commit()
 conn.close()
