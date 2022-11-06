@@ -88,6 +88,9 @@ def add_incident():
     if date == None:
         date = datetime.now()
 
+
+
+
     else:
         date = datetime.strptime(date, '%Y-%m-%d')
     incident_type = request.args.get('incident_type')
@@ -104,6 +107,7 @@ def add_incident():
             "long" : long,
             "lat" : lat,
             "email" : email }
+            
 @app.route('/resolve_incident', methods= ['POST'])
 def remove_incident():
     id = request.args.get('id')
