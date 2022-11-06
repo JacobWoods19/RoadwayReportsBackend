@@ -15,9 +15,12 @@ cnxn = mysql.connector.connect(**config)
 cnxn = mysql.connector.connect(**config)
 cur = cnxn.cursor() 
 
-##get all resolved reports and print them out
+cur.execute("CREATE TABLE resolved_reports(rid VARCHAR(300), category VARCHAR (100), date_added DATE, date_resolved DATE);")
+
+
+### get all resolved reports
 cur.execute("SELECT * FROM resolved_reports")
 rows = cur.fetchall()
-for row in rows:
-    print(row)
+print(rows)
+
 cnxn.commit()

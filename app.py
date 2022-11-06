@@ -28,7 +28,18 @@ config['database'] = 'TigerHacks22'
 cnxn = mysql.connector.connect(**config)
 cur = cnxn.cursor(buffered=True) 
 
-@app.route('/', methods=['GET'])
+
+
+@app.route('/get_average_response', methods=['GET'])
+def get_average_response():
+    ## givent a table of resolved reports, get the average bewteen the date added and date resolved for all reports
+    cur.execute("SELECT * FROM resolved_reports")
+    rows = cur.fetchall()
+    print(rows)
+    total = 0
+    for row in rows:
+        total += (row[3] - row[2]).days
+    return jsonify({"average": total/len(rows)})
 
 @app.route('/get_all_incidents')
 def get_all_incidents():
