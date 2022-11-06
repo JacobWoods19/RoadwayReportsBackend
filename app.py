@@ -5,6 +5,8 @@ from flask_cors import CORS, cross_origin
 import uuid 
 import mysql.connector
 from mysql.connector.constants import ClientFlag
+import datetime
+
 config = {
     'user': 'jacobwoods45',
     'password': '1234',
@@ -25,9 +27,10 @@ config['database'] = 'TigerHacks22'
 cnxn = mysql.connector.connect(**config)
 cur = cnxn.cursor(buffered=True) 
 
+@app.route('/', methods=['GET'])
+
 @app.route('/get_all_incidents')
 def get_all_incidents():
-
     cur.execute("SELECT * FROM reports WHERE resolved = 0")
     ## convert to json
     rows = cur.fetchall()
@@ -54,6 +57,18 @@ def add_incident():
 def remove_incident():
     id = request.args.get('id')
     ##For given rid, delete from reports
+    ## Add resolved report to resolved_reports with type and date
+    cur.execute("SELECT category, r_date FROM reports WHERE rid = %s", (id,))
+    rows = cur.fetchall()
+    category = rows[0][0]
+    date = rows[0][1]
+    ## Get today's date and time to pass into resolved_reports
+    now = datetime.now()
+    
+
+    ##resolved_reports(rid VARCHAR(300), category VARCHAR (100), date_added DATE, date_resolved DATE
+    cur.execute("INSERT INTO resolved_reports VALUES (%s,%s,%s,%s)", (id, category, date, now))
+
     cur.execute("DELETE FROM reports WHERE rid = %s;" , (id,))
     cnxn.commit()
     return {"status": "success",

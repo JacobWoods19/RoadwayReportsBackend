@@ -15,6 +15,6 @@ cnxn = mysql.connector.connect(**config)
 cnxn = mysql.connector.connect(**config)
 cur = cnxn.cursor() 
 
+cur.execute("CREATE TABLE resolved_reports(rid VARCHAR(300), category VARCHAR (100), date_added DATE, date_resolved DATE);")
 
-cur.execute("CREATE TABLE reports (rid VARCHAR(200) NOT NULL PRIMARY KEY,user_email VARCHAR(30), r_date DATE ,category VARCHAR(10), r_long VARCHAR(20),r_lat VARCHAR(20), resolved Int);")
 cnxn.commit()
