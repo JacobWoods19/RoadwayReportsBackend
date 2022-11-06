@@ -28,7 +28,19 @@ config['database'] = 'TigerHacks22'
 cnxn = mysql.connector.connect(**config)
 cur = cnxn.cursor(buffered=True) 
 
-
+@app.route('/avg_response_time_by_category', methods=['GET'])
+def avg_response_time_by_category():
+    ##example resopnse
+    ## [[category1, category2, category3], [avg_response_time1, avg_response_time2, avg_response_time3]]
+    cur.execute("SELECT category, AVG(DATEDIFF(date_resolved, date_added)) FROM resolved_reports GROUP BY category;")
+    result = cur.fetchall()
+    categories = []
+    avg_response_times = []
+    for row in result:
+        categories.append(row[0])
+        avg_response_times.append(row[1])
+    return jsonify([categories, avg_response_times])
+    
 
 @app.route('/get_average_response', methods=['GET'])
 def get_average_response():
@@ -39,7 +51,7 @@ def get_average_response():
     total = 0
     for row in rows:
         total += (row[3] - row[2]).days
-    return jsonify({"average": total/len(rows)})
+    return jsonify({"average": int(total/len(rows))})
 
 @app.route('/get_chart_data', methods=['GET'])
 def get_chart_data():

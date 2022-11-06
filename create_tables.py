@@ -15,12 +15,12 @@ cnxn = mysql.connector.connect(**config)
 cnxn = mysql.connector.connect(**config)
 cur = cnxn.cursor() 
 
-cur.execute("CREATE TABLE resolved_reports(rid VARCHAR(300), category VARCHAR (100), date_added DATE, date_resolved DATE);")
+# cur.execute("CREATE TABLE resolved_reports(rid VARCHAR(300), category VARCHAR (100), date_added DATE, date_resolved DATE);")
 
 
-### get all resolved reports
-cur.execute("SELECT * FROM resolved_reports")
-rows = cur.fetchall()
-print(rows)
+## remove all data in resolved_reports
+cur.execute("DELETE FROM resolved_reports")
+cnxn.commit()
+
 
 cnxn.commit()
