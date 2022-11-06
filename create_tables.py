@@ -18,9 +18,17 @@ cur = cnxn.cursor()
 # cur.execute("CREATE TABLE resolved_reports(rid VARCHAR(300), category VARCHAR (100), date_added DATE, date_resolved DATE);")
 
 
-## remove all data in resolved_reports
-cur.execute("DELETE FROM resolved_reports")
+# insert user
+cur.execute("INSERT INTO users (email, u_password) VALUES (%s, %s)", ("jacobwoods4fsa5", "1234"))
 cnxn.commit()
+cnxn.commit()
+## print all users
+cur.execute("SELECT * FROM users")
+rows = cur.fetchall()
+print(rows)
+
+
+
 
 
 cnxn.commit()

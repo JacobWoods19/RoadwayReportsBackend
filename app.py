@@ -40,7 +40,7 @@ def avg_response_time_by_category():
         categories.append(row[0])
         avg_response_times.append(row[1])
     return jsonify([categories, avg_response_times])
-    
+
 
 @app.route('/get_average_response', methods=['GET'])
 def get_average_response():
@@ -128,10 +128,13 @@ def add_user():
 def verify_user():
     email = request.args.get('email')
     password = request.args.get('password')
-    get_password = cur.execute("SELECT u_password FROM users WHERE email = %s", (email,)).fetchone()
-    cnxn.commit()
+    response = cur.execute("SELECT u_password FROM users WHERE email = %s", (email,))
+    rows = cur.fetchall()
+    if len(rows) == 0:
+        return {"status": "failure",
+                "message": "User does not exist"}
     ## check if password is correct
-    if get_password[0] == password:
+    if rows[0] == password:
         return {"status": "success",
                 "message": "User verified successfully",
                 "email" : email,
