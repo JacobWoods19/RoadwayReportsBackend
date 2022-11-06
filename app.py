@@ -40,6 +40,18 @@ def get_average_response():
     for row in rows:
         total += (row[3] - row[2]).days
     return jsonify({"average": total/len(rows)})
+@app.roate('/get_chart_data', methods=['GET'])
+def get_chart_data():
+    ##returns array of response times for each resolved report
+    ## [ [date, response time], [date, response time], ...]
+    cur.execute("SELECT * FROM resolved_reports")
+    rows = cur.fetchall()
+    print(rows)
+    data = []
+    for row in rows:
+        data.append([row[2], (row[3] - row[2]).days])
+    return jsonify({"data": data})
+    
 
 @app.route('/get_all_incidents')
 def get_all_incidents():
