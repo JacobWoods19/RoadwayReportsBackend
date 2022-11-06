@@ -7,7 +7,7 @@ import mysql.connector
 from mysql.connector.constants import ClientFlag
 import datetime
 from datetime import datetime
-from selenium import webdriver
+
 
 config = {
     'user': 'jacobwoods45',
@@ -27,7 +27,7 @@ CORS(app)
 
 config['database'] = 'TigerHacks22' 
 cnxn = mysql.connector.connect(**config)
-web = webdriver.Chrome()
+
 cur = cnxn.cursor(buffered=True) 
 
 @app.route('/avg_response_time_by_category', methods=['GET'])
@@ -66,26 +66,6 @@ def get_chart_data():
     for row in rows:
         data.append({"date": row[2], "response_time": (row[3] - row[2]).days})
     return jsonify(data)
-def submit_form(name, location, issue, email):
-    fill_name = web.find_element("xpath", '//*[@id="formPage"]/div/div[4]/form/label[7]/input')
-    fill_name.send_keys(name)
-
-
-    fill_location = web.find_element("xpath", '//*[@id="formPage"]/div/div[4]/form/label[3]/textarea')
-    fill_location.send_keys(location)
-
-    fill_issue = web.find_element("xpath", '//*[@id="formPage"]/div/div[4]/form/label[6]/textarea')
-    fill_issue.send_keys(issue)
-
-    fill_email = web.find_element("xpath", '//*[@id="formPage"]/div/div[4]/form/label[8]/input')
-    fill_email.send_keys(email)
-
-    phone = "No Phone"
-    fill_phone = web.find_element("xpath", '//*[@id="formPage"]/div/div[4]/form/label[9]/input')
-    fill_phone.send_keys(phone)
-
-    submit = web.find_element("xpath", '//*[@id="validate-form"]')
-    submit.click()
 
 @app.route('/get_reports_for_email', methods=['GET'])
 def get_reports_for_email():
@@ -119,7 +99,6 @@ def add_incident():
     cur.execute("INSERT INTO reports VALUES (%s,%s,%s,%s,%s,%s,%s)", (str(uuid.uuid4()), email, date, incident_type, long, lat, 0))
     print(str(uuid.uuid4()), date, incident_type, long, lat, email, 0)
     cnxn.commit()
-    submit_form(date, incident_type, long + lat, email)
     return {"status": "success",
             "message": "Incident added successfully",
             "incident_type" : incident_type,
