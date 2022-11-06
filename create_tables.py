@@ -19,9 +19,8 @@ cur = cnxn.cursor()
 
 
 # insert user
-cur.execute("INSERT INTO users (email, u_password) VALUES (%s, %s)", ("jacobwoods4fsa5", "1234"))
-cnxn.commit()
-cnxn.commit()
+cur.execute("INSERT INTO users (email, u_password) VALUES (%s, %s)", ("user", "password"))
+
 ## print all users
 cur.execute("SELECT * FROM users")
 rows = cur.fetchall()

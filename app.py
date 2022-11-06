@@ -128,13 +128,13 @@ def add_user():
 def verify_user():
     email = request.args.get('email')
     password = request.args.get('password')
-    response = cur.execute("SELECT u_password FROM users WHERE email = %s", (email,))
+    cur.execute("SELECT u_password FROM users WHERE email = %s", (email,))
     rows = cur.fetchall()
     if len(rows) == 0:
         return {"status": "failure",
                 "message": "User does not exist"}
     ## check if password is correct
-    if rows[0] == password:
+    if rows[0][0] == password:
         return {"status": "success",
                 "message": "User verified successfully",
                 "email" : email,
