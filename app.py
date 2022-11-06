@@ -65,7 +65,14 @@ def get_chart_data():
         data.append({"date": row[2], "response_time": (row[3] - row[2]).days})
     return jsonify(data)
 
-
+@app.route('/get_reports_for_email', methods=['GET'])
+def get_reports_for_email():
+    ## given an email, return all reports for that email
+    email = request.args.get('email')
+    cur.execute("SELECT * FROM reports WHERE email = %s", (email,))
+    rows = cur.fetchall()
+    print(rows)
+    return jsonify(rows)
 
 @app.route('/get_all_incidents')
 def get_all_incidents():
@@ -80,6 +87,7 @@ def add_incident():
     ## if date is not given, set date to current date
     if date == None:
         date = datetime.now()
+
     else:
         date = datetime.strptime(date, '%Y-%m-%d')
     incident_type = request.args.get('incident_type')
