@@ -17,6 +17,7 @@ def get_all_incidents():
     cur.execute("SELECT * FROM reports WHERE resolved = 0")
     ## convert to json
     rows = cur.fetchall()
+    conn.close()
     return jsonify(rows)
 @app.route('/add_incident', methods= ['POST'])
 def add_incident():
@@ -29,6 +30,7 @@ def add_incident():
     email = request.args.get('email')
     cur.execute("INSERT INTO reports VALUES (?,?,?,?,?,?,?)", (str(uuid.uuid4()), date, incident_type, long, lat, email, 0))
     conn.commit()
+    conn.close()
     return {"status": "success",
             "message": "Incident added successfully",
             "incident_type" : incident_type,
@@ -44,6 +46,7 @@ def remove_incident():
     ##For given rid, set resolved to 1
     cur.execute("UPDATE reports SET resolved = 1 WHERE id = ?", (id,))
     conn.commit()
+    conn.close()
     return {"status": "success",
             "message": "Incident removed successfully",
             "rid" : id}
@@ -56,6 +59,7 @@ def add_user():
     password = request.args.get('password')
     cur.execute("INSERT INTO users VALUES (?,?)", (email, password))
     conn.commit()
+    conn.close()
     return {"status": "success",
             "message": "User added successfully",
             "email" : email,
@@ -68,6 +72,8 @@ def verify_user():
     email = request.args.get('email')
     password = request.args.get('password')
     get_password = cur.execute("SELECT u_password FROM users WHERE email = ?", (email,)).fetchone()
+    conn.commit()
+    conn.close()
     ## check if password is correct
     if get_password[0] == password:
         return {"status": "success",
@@ -89,4 +95,4 @@ if __name__ == '__main__':
     cur.execute("""SELECT * FROM sqlite_master WHERE type='table' AND name='reports'""")
     if cur.fetchone() is None:
         cur.execute("CREATE TABLE reports (rid VARCHAR(30) NOT NULL PRIMARY KEY,user_email VARCHAR30, r_date DATE NOT NULL,category VARCHAR(10) NOT NULL,r_long VARCHAR(20) NOT NULL,r_lat VARCHAR(20), resolved BIT);")
-    app.run(host="0.0.0.0")
+    app.run(host="0.0.0.0", port = 8282)
