@@ -44,7 +44,7 @@ def remove_incident():
     cur = conn.cursor()
     id = request.args.get('id')
     ##For given rid, set resolved to 1
-    cur.execute("UPDATE reports SET resolved = 1 WHERE id = ?", (id,))
+    cur.execute("UPDATE reports SET resolved = 1 WHERE rid = ?", (id,))
     conn.commit()
     conn.close()
     return {"status": "success",
